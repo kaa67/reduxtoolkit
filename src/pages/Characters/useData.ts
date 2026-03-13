@@ -1,12 +1,9 @@
 import { useEffect } from "react";
 
-import { useParams } from "react-router"
-
 import { useAppDispatch, useAppSelector } from "../../store"
 import { charactersFetch } from "../../store/charactersSlice";
 
 const useData = () => {
-    const { page } = useParams()
     const dispatch = useAppDispatch();
 
     const characters = useAppSelector(
@@ -18,11 +15,10 @@ const useData = () => {
         () => {
             dispatch(charactersFetch())
         },
-        [page, dispatch],
+        [dispatch],
     )
 
     const data = {
-        page: page || '1',
         characters,
     }
 

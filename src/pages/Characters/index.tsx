@@ -1,9 +1,23 @@
-import { Link } from "react-router"
+import { Link, useParams } from "react-router"
 
-import useData from "./useData"
+// import useData from "./useData"
+import { useAppDispatch } from "../../store";
+import { useEffect } from "react";
+import { charactersFetch } from "../../store/charactersSlice";
+import { memoizedCharacters } from "../../store/charactersSelector";
+import { useSelector } from "react-redux";
 
 const Characters = () => {
-    const { page, characters } = useData()
+    const { pageNumber } = useParams()
+    const dispatch = useAppDispatch();
+    const characters = useSelector(memoizedCharacters)
+
+    useEffect(
+        () => {
+            dispatch(charactersFetch())
+        },
+        [dispatch],
+    )
 
     return (
         <>
@@ -13,11 +27,11 @@ const Characters = () => {
                 </Link>
             </div>
 
-            <h1>Мерзкие типы, страница {page || '1'}</h1>
+            <h1>Мерзкие типы, страница {pageNumber || '1'}</h1>
 
             <table>
                 <tbody>
-                    {characters.map(
+                    {(characters ?? []).map(
                         (ch, key) => (
                             <tr key={key}>
                                 <td>{ch.name}</td>
